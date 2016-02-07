@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Ansible-cheatsheet by JREAM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Ansible-cheatsheet</h1>
+      <h2 class="project-tagline">Keeping Notes, I&#39;m not a genius</h2>
+      <a href="https://github.com/JREAM/ansible-cheatsheet" class="btn">View on GitHub</a>
+      <a href="https://github.com/JREAM/ansible-cheatsheet/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/JREAM/ansible-cheatsheet/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="ansible-cheatsheet" class="anchor" href="#ansible-cheatsheet" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Ansible Cheatsheet</h1>
+
+<p>Cliff notes bro, I'm not a genius.</p>
+
+<ul>
+<li>
+<a href="#definitions">Definitions</a> 
+
+<ul>
+<li><a href="#the-basics">The Basics</a></li>
+<li><a href="#more-features">More Features</a></li>
+</ul>
+</li>
+<li>
+<a href="#example-layouts">Example Layouts</a>
+
+<ul>
+<li><a href="#simple">Simple</a></li>
+<li><a href="#advanced">Advanced</a></li>
+<li><a href="#host">Host</a></li>
+<li><a href="#playbook">Playbook</a></li>
+</ul>
+</li>
+<li>
+<a href="#run-playbooks">Run Playbooks</a>
+
+<ul>
+<li><a href="#reboot-one-server">Reboot One Server</a></li>
+<li><a href="#ad-hoc-commands">Ad-Hoc Commands</a></li>
+<li><a href="#paralell-running">Paralell Running</a></li>
+</ul>
+</li>
+<li>
+<a href="#security">Security</a>
+
+<ul>
+<li><a href="#encrypt-a-password">Encrypt a Password</a></li>
+<li><a href="#encrypt-a-vault">Encrypt a Vault</a></li>
+</ul>
+</li>
+</ul>
+
+<h1>
+<a id="definitions" class="anchor" href="#definitions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Definitions</h1>
+
+<h3>
+<a id="the-basics" class="anchor" href="#the-basics" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>The Basics</h3>
+
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ini</td>
+<td>Inventory</td>
+<td>file to describe a host</td>
+</tr>
+<tr>
+<td>yml</td>
+<td>Playbooks</td>
+<td>The main configurations for each section</td>
+</tr>
+<tr>
+<td>yml</td>
+<td>Plays</td>
+<td>A single item inside a playbook, eg: install nginx.</td>
+</tr>
+<tr>
+<td>j2</td>
+<td>Templates</td>
+<td>Templates with optional variable configurations in Jinja2 format</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="more-features" class="anchor" href="#more-features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>More Features</h3>
+
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>yml</td>
+<td>Tags</td>
+<td>Can add to almost anything, add to your Plays to SSH only certain items.</td>
+</tr>
+<tr>
+<td>yml</td>
+<td>Roles</td>
+<td>Apply any Rules to different Playbooks</td>
+</tr>
+<tr>
+<td>yml</td>
+<td>Handlers</td>
+<td>A separate area that accepts the "notify" command.</td>
+</tr>
+<tr>
+<td>yml</td>
+<td>Notify</td>
+<td>Add to a Play and it will trigger whatever the Handler does.</td>
+</tr>
+</tbody>
+</table>
+
+<h1>
+<a id="example-layouts" class="anchor" href="#example-layouts" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example Layouts</h1>
+
+<h3>
+<a id="simple" class="anchor" href="#simple" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Simple</h3>
+
+<pre><code>/roles/
+  /apache2/  &lt;-- Folder format for all your roles
+    /tasks/
+      main.yml
+vars.yml &lt;-- optional
+hosts
+playbook.yml
+</code></pre>
+
+<h3>
+<a id="advanced" class="anchor" href="#advanced" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Advanced</h3>
+
+<pre><code>/handlers/
+  services.yml &lt;-- Reboot Apache, SSH, etc
+  .. Can have many
+/roles/
+  /apache2/
+    /files/
+      anything
+    /tasks/
+      main.yml (The main guy)
+    /templates/
+      vhost.j2
+/vars/ (Or you can have one single vars file)
+  apache.yml
+hosts &lt;-- INI format
+playbook.yml &lt;-- The main runner!
+</code></pre>
+
+<h3>
+<a id="host" class="anchor" href="#host" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Host</h3>
+
+<p>This would be called <code>host</code> in the root folder:</p>
+
+<pre><code>[websites]
+dallas   site-a.com
+boston   site-b.com:3333
+
+[targets]
+localhost       ansible_connection=local
+site-a.com      ansible-connection=ssh
+site-a.com      ansible_connection=ssh
+</code></pre>
+
+<h3>
+<a id="playbook" class="anchor" href="#playbook" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Playbook</h3>
+
+<p>A playbook runs roles, you might have something like this:</p>
+
+<pre><code>---
+- name: Provision Webserver
+  hosts: all
+  user: root   # Deploying as root will require --ask-sudo-pass
+  sudo: true
+  gather_facts: yes  # http://docs.ansible.com/ansible/playbooks_variables.html
+  vars_files:
+    - vars/apache.yml
+  vars:  # Dynamically set variables too
+    - { is_vagrant: false }
+
+  # Where all the rules run, you can optionally do this without the tags like:
+  # roles:
+  # - role: core
+  # - role: host
+  # - role: apache2
+  roles:  
+    - { role: core, tags: ['core'] }
+    - { role: host, tags: ['host'] }
+    - { role: apache2, tags: ['apache2', 'apache'] }
+
+  # If you are using handlers to notify events
+  handlers:
+    - include: handlers/services.yml
+</code></pre>
+
+<h1>
+<a id="run-playbooks" class="anchor" href="#run-playbooks" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Run Playbooks</h1>
+
+<p>You can use <code>-vvv</code> and <code>-vvvv</code> for verbose output. In these cases pretend we have a <code>hosts</code> file with <code>production</code> group with two servers: <code>dallas</code> and <code>boston</code>.</p>
+
+<pre><code>  ansible-playbook -i dallas site.yml
+  ansible-playbook -i dallas playbook.yml --ask-sudo-pass
+</code></pre>
+
+<pre><code>  ansible-playbook -i dallas playbook.yml
+  ansible-playbook -i -vvv dallas playbook.yml --tags anything_you_tagged
+  ansible-playbook playbook.yml --skip-tags "anything_you_tagged"
+</code></pre>
+
+<h3>
+<a id="reboot-one-server" class="anchor" href="#reboot-one-server" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Reboot One Server</h3>
+
+<p>You could reboot only a boston server from the hosts file with:</p>
+
+<pre><code>  ansible-playbook -i production webservers.yml --limit boston
+</code></pre>
+
+<h3>
+<a id="ad-hoc-commands" class="anchor" href="#ad-hoc-commands" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Ad-Hoc Commands</h3>
+
+<pre><code>  ansible boston -i production -m ping
+  ansible boston -i production -m command -a '/sbin/reboot'
+</code></pre>
+
+<h3>
+<a id="paralell-running" class="anchor" href="#paralell-running" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Paralell Running</h3>
+
+<p>ansible-playbook playbook.yml -f 10</p>
+
+<h1>
+<a id="security" class="anchor" href="#security" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Security</h1>
+
+<h3>
+<a id="encrypt-a-password" class="anchor" href="#encrypt-a-password" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Encrypt a Password</h3>
+
+<p>Copy and paste the password you create from here:</p>
+
+<pre><code>   mkssh_userpass --method=SHA-512
+</code></pre>
+
+<h3>
+<a id="encrypt-a-vault" class="anchor" href="#encrypt-a-vault" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Encrypt a Vault</h3>
+
+<p>You can <code>pip install cryptography</code> for faster speeds.
+To encrypt sensitive data run:</p>
+
+<pre><code>  ansible-vault encrypt keydata.yml
+</code></pre>
+
+<p>To decrypt it while running your playbook </p>
+
+<pre><code>  ansible-playbook test.yml --ask-vault-pass
+</code></pre>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/JREAM/ansible-cheatsheet">Ansible-cheatsheet</a> is maintained by <a href="https://github.com/JREAM">JREAM</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+            <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-3106599-2");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
