@@ -37,7 +37,7 @@ Cliff notes bro, I'm not a genius.
 
 # Example Layouts
 
-## Simple
+### Simple
 ```
 /roles/
   /apache2/  <-- Folder format for all your roles
@@ -48,7 +48,7 @@ hosts
 playbook.yml
 ```
 
-## Advanced
+### Advanced
 ```
 /handlers/
   services.yml <-- Reboot Apache, SSH, etc
