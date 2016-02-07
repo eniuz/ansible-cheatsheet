@@ -1,6 +1,5 @@
 # Ansible Cheatsheet
-Keeping Notes, I'm not a genius
-
+Cliff notes bro, I'm not a genius.
 
 - [Definitions](#definitions) 
   - [The Basics](#the-basics)
@@ -21,16 +20,20 @@ Keeping Notes, I'm not a genius
 # Definitions
 
 ### The Basics
-(INI) Inventory - file to describe a host
-(YML) Playbooks - The main configurations for each section
-(YML) Plays - A single item inside a playbook, eg: install nginx.
-(J2)  Templates - Templates with optional variable configurations in Jinja2 format.
+| Format | Type | Description |
+|---|---|---|
+| ini | Inventory | file to describe a host |
+| yml | Playbooks | The main configurations for each section |
+| yml | Plays | A single item inside a playbook, eg: install nginx. |
+| j2 | Templates | Templates with optional variable configurations in Jinja2 format |
 
 ### More Features
-(YML) Tags - Can add to almost anything, add to your Plays to SSH only certain items.
-(YML) Roles - Apply any Rules to different Playbooks
-(YML) Handlers - A separate area that accepts the "notify" command.
-(YML) Notify - Add to a Play and it will trigger whatever the Handler does.
+| Format | Type | Description |
+|---|---|---|
+| yml | Tags | Can add to almost anything, add to your Plays to SSH only certain items. |
+| yml | Roles | Apply any Rules to different Playbooks |
+| yml | Handlers | A separate area that accepts the "notify" command. |
+| yml | Notify | Add to a Play and it will trigger whatever the Handler does. |
 
 # Example Layouts
 
